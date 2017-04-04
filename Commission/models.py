@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from Commission import db
+from exceptions import *
 
 
 class Rifle(db.Model):
@@ -20,18 +21,38 @@ class Rifle(db.Model):
 
     @staticmethod
     def update_rifle(lock, stock, barrel):
-        rifle = Rifle.last_rifle()
+
+        if Rifle.last_rifle():
+            rifle = Rifle.last_rifle()
+        else:
+            rifle = Rifle.create_rifle()
+
         rifle.lock += lock
         rifle.stock += stock
         rifle.barrel += barrel
+
+        Rifle.__check_status(rifle)
         db_add_commit(rifle)
 
     @staticmethod
     def create_rifle():
+        Rifle.__check_status(Rifle.last_rifle())
         rifle = Rifle()
         db_add_commit(rifle)
+        return rifle
+
+    @staticmethod
+    def get_rifles():
+        total_num = Rifle.query.count()
+        return Rifle.query.limit(total_num-1 if total_num else 0).all()
+
+    @staticmethod
+    def __check_status(rifle):
+        if rifle and not(1 <= rifle.lock <= 70 and 1 <= rifle.stock <= 80 \
+                    and 1 <= rifle.barrel <= 90):
+            raise OutOfRangeError
 
 
 def db_add_commit(obj):
-    db.add(obj)
-    db.commit()
+    db.session.add(obj)
+    db.session.commit()

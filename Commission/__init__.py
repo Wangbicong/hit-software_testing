@@ -5,18 +5,18 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-def create_app():
+def create_app(config_object='config.Config'):
 
     app = Flask(__name__)
 
-    app.config.from_pyfile('../config.py')
+    app.config.from_object(config_object)
 
     db.init_app(app)
 
     from Commission.models import Rifle
     db.create_all(app=app)
 
-    from Commission.views import main_bp
-    app.register_blueprint(main_bp)
+    from Commission.api import api_bp
+    app.register_blueprint(api_bp)
 
     return app
