@@ -9,3 +9,8 @@ def out_of_range(error):
     return jsonify(message=error.message), error.status_code
 
 
+@api_bp.app_errorhandler(ZeroError)
+def all_is_zero(error):
+    return jsonify(message=error.message), error.status_code
+
+

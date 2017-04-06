@@ -22,6 +22,9 @@ class Rifle(db.Model):
     @staticmethod
     def update_rifle(lock, stock, barrel):
 
+        if not lock and not stock and not barrel:  # 不允许全部为0
+            raise ZeroError
+
         if Rifle.last_rifle():
             rifle = Rifle.last_rifle()
         else:
@@ -31,7 +34,7 @@ class Rifle(db.Model):
         rifle.stock += stock
         rifle.barrel += barrel
 
-        Rifle.__check_status(rifle)
+        Rifle.__check_status(rifle, min_value=0)
         db_add_commit(rifle)
 
     @staticmethod
@@ -47,9 +50,9 @@ class Rifle(db.Model):
         return Rifle.query.limit(total_num-1 if total_num else 0).all()
 
     @staticmethod
-    def __check_status(rifle):
-        if rifle and not(1 <= rifle.lock <= 70 and 1 <= rifle.stock <= 80 \
-                    and 1 <= rifle.barrel <= 90):
+    def __check_status(rifle, min_value=1):  # 添加时元素最小值可以部分为0，提交时最小值为1
+        if rifle and not(min_value <= rifle.lock <= 70 and min_value <= rifle.stock <= 80 \
+                    and min_value <= rifle.barrel <= 90):
             raise OutOfRangeError
 
 
