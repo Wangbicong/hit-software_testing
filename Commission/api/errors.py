@@ -1,16 +1,12 @@
 # -*- coding:utf-8 -*-
-from Commission.api import api_bp
-from Commission.exceptions import *
-from flask import jsonify
+from flask import jsonify, make_response
 
 
-@api_bp.app_errorhandler(OutOfRangeError)
-def out_of_range(error):
-    return jsonify(message=error.message), error.status_code
+def out_of_range():
+    return make_response(jsonify(message='Out of range'), 416)
 
 
-@api_bp.app_errorhandler(ZeroError)
-def all_is_zero(error):
-    return jsonify(message=error.message), error.status_code
+def all_is_zero():
+    return make_response(jsonify(message='all is zero'), 417)
 
 

@@ -77,7 +77,7 @@ class WhiteBoxTestCase(BaseTestCase):
         self.assertEquals(response.status_code, 416)
 
     def test_post_rifle_legal(self):
-        self._patch_rifle()
+        self._patch_rifle(5, 5, 5)
         response = self._post_rifle()
         self.assertEquals(response.status_code, 200)
 

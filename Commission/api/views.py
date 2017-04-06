@@ -3,6 +3,7 @@ from flask import jsonify
 from flask_restful import Resource, reqparse
 from Commission.models import Rifle
 from Commission.api import api
+from Commission.api.errors import *
 from Commission.exceptions import *
 
 rifle_parser = reqparse.RequestParser()
@@ -38,15 +39,23 @@ class RiflesApi(Resource):
 class RifleApi(Resource):
 
     def post(self):
-        if Rifle.last_rifle():
-            Rifle.create_rifle()
-            return jsonify(message='success')
-        else:
-            return jsonify(message='Out of range'), 416
+        try:
+            if Rifle.last_rifle():
+                Rifle.create_rifle()
+                return jsonify(message='success')
+            else:
+                return out_of_range()
+        except OutOfRangeError:
+            return out_of_range()
 
     def patch(self):
-        args = rifle_parser.parse_args()
-        Rifle.update_rifle(**args)
+        try:
+            args = rifle_parser.parse_args()
+            Rifle.update_rifle(**args)
+        except ZeroError:
+            return all_is_zero()
+        except OutOfRangeError:
+            return out_of_range()
         return jsonify(message='success')
 
 
