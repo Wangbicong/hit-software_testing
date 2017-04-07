@@ -121,3 +121,18 @@ class WhiteBoxTestCase(BaseTestCase):
     def test_patch_file_legal3(self):
         response = self._patch_rifle('a', 'a', 'a')
         self.assertEquals(response.status_code, 400)
+
+    def test_patch_two_illegal(self):
+        self._patch_rifle(10, 10, 10)
+        response = self._patch_rifle(65, 65, 65)
+        self.assertEquals(response.status_code, 416)
+
+    def test_patch_two_legal(self):
+        self._patch_rifle(10, 10, 10)
+        response = self._patch_rifle(10, 10, 10)
+        self.assertEquals(response.status_code, 200)
+
+    def test_patch_two_legal_2(self):
+        self._patch_rifle(30, 30, 30)
+        response = self._patch_rifle(10, 10, 10)
+        self.assertEquals(response.status_code, 200)
