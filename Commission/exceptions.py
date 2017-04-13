@@ -9,3 +9,8 @@ class ZeroError(Exception):
 
     status_code = 417
     message = 'All is zero'
+
+
+class LoginTwiceError(Exception):
+    status_code = 405
+    message = u'已注册'

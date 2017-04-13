@@ -18,5 +18,7 @@ def create_app(config_object='config.Config'):
 
     from Commission.api import api_bp
     app.register_blueprint(api_bp)
+    from Commission.auth import auth_bp
+    app.register_blueprint(auth_bp)
 
     return app

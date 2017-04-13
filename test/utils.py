@@ -29,3 +29,17 @@ class BaseTestCase(LiveServerTestCase):
 
     def _get_rifles(self):
         return requests.get(self.get_server_url() + '/rifles')
+
+    def _add_user(self, username, password):
+        return requests.post(self.get_server_url() + '/login', json={
+            'username': username,
+            'password': password,
+            'flag': 1
+        })
+
+    def _check_user(self, username, password):
+        return requests.post(self.get_server_url() + '/login', json={
+            'username': username,
+            'password': password,
+            'flag': 0
+        })

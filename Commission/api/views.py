@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-from flask import jsonify
 from flask_restful import Resource, reqparse
 from Commission.models import Rifle
 from Commission.api import api
@@ -14,9 +13,9 @@ rifle_parser.add_argument('barrel', type=int, required=True, choices=range(0, 91
 
 class RiflesApi(Resource):
 
-    def get(self):
+    def get(self, username):
         result = []
-        for rifle in Rifle.get_rifles():
+        for rifle in Rifle.get_rifles(username):
 
             income = rifle.lock*45+rifle.stock*30+rifle.barrel*25
             if income <= 1000:
@@ -38,20 +37,20 @@ class RiflesApi(Resource):
 
 class RifleApi(Resource):
 
-    def post(self):
+    def post(self, username):
         try:
-            if Rifle.last_rifle():
-                Rifle.create_rifle()
+            if Rifle.last_rifle(username):
+                Rifle.create_rifle(username)
                 return jsonify(message='success')
             else:
                 return out_of_range()
         except OutOfRangeError:
             return out_of_range()
 
-    def patch(self):
+    def patch(self, username):
         try:
             args = rifle_parser.parse_args()
-            Rifle.update_rifle(**args)
+            Rifle.update_rifle(username, **args)
         except ZeroError:
             return all_is_zero()
         except OutOfRangeError:
@@ -59,5 +58,5 @@ class RifleApi(Resource):
         return jsonify(message='success')
 
 
-api.add_resource(RiflesApi, '/rifles')
-api.add_resource(RifleApi, '/rifle')
+api.add_resource(RiflesApi, '/rifles/<username>')
+api.add_resource(RifleApi, '/rifle/<username>')

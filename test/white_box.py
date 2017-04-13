@@ -5,7 +5,6 @@ import json
 
 
 class WhiteBoxTestCase(BaseTestCase):
-
     def test_server_start(self):
         response = self._get_rifles()
         self.assertEquals(response.status_code, 200)
@@ -15,7 +14,7 @@ class WhiteBoxTestCase(BaseTestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_error_http_method(self):
-        response = requests.get(self.get_server_url()+'/rifle')
+        response = requests.get(self.get_server_url() + '/rifle')
         self.assertEquals(response.status_code, 405)
 
     def test_error_arg(self):
