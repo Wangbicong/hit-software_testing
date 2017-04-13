@@ -98,10 +98,14 @@ class User(db.Model):
     @staticmethod
     def get_all_user_name():
         result = []
-        users = User.query.all()
+        users = User.query.filter_by(flag=0).all()
         for user in users:
             result.append(user.username)
         return result
+
+    @staticmethod
+    def is_existed_user(username):
+        return bool(User.query.filter_by(username=username).first())
 
 
 def db_add_commit(obj):

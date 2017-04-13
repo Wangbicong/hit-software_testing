@@ -14,13 +14,10 @@ rifle_parser.add_argument('barrel', type=int, required=True, choices=range(0, 91
 class RiflesApi(Resource):
 
     def get(self, username):
+        if not User.is_existed_user(username):
+            return make_response(jsonify(message=u'不存在用户'), 404)
         if User.is_super_user(username):
-            usernames = User.get_all_user_name()
-            result = {}
-            for un in usernames:
-                if not User.is_super_user(un):
-                    result[un] = (RiflesApi.get_all_rifles(un))
-            return jsonify(result)
+            return jsonify(User.get_all_user_name())
         else:
             return RiflesApi.get_all_rifles(username)
 
@@ -50,6 +47,8 @@ class RiflesApi(Resource):
 class RifleApi(Resource):
 
     def post(self, username):
+        if not User.is_existed_user(username):
+            return make_response(jsonify(message=u'不存在用户'), 404)
         if User.is_super_user(username):
             return make_response(jsonify(message=u'无权限'), 404)
         try:
@@ -62,6 +61,8 @@ class RifleApi(Resource):
             return out_of_range()
 
     def patch(self, username):
+        if not User.is_existed_user(username):
+            return make_response(jsonify(message=u'不存在用户'), 404)
         if User.is_super_user(username):
             return make_response(jsonify(message=u'无权限'), 404)
         try:

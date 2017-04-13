@@ -3,6 +3,8 @@ import requests
 
 HOST = 'http://127.0.0.1:5000'
 
+# HOST = 'http://118.89.230.54:8000'
+
 
 def _add_user(username, password):
     return requests.post(HOST + '/login', json={
@@ -36,7 +38,7 @@ def _post_rifle(username):
     return requests.post(HOST+'/rifle/'+username)
 
 if __name__ == '__main__':
-    _add_user('wbcd3', 'wbc')
+    print _check_user('wbcd3332', 'wbc').status_code
     print _get_rifles('wbc').content
     print _get_rifles('wbcd').content
     print _patch_rifle('wbc').content
