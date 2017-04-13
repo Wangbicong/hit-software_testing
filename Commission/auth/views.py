@@ -16,12 +16,12 @@ class UserApi(Resource):
         args = user_parser.parse_args()
         if args['flag']:
             if User.add_user(username=args['username'], password=args['password']):
-                return jsonify(message='success')
+                return jsonify(message='success', flag=User.is_super_user(username=args['username']))
             else:
                 return make_response(jsonify(message=u'注册失败'), 405)
         else:
             if User.verify_password(username=args['username'], password=args['password']):
-                return make_response(jsonify(message=u'验证成功'), 200)
+                return make_response(jsonify(message=u'验证成功', flag=User.is_super_user(username=args['username'])), 200)
             else:
                 return make_response(jsonify(message=u'验证失败'), 405)
 

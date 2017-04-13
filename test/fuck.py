@@ -36,8 +36,8 @@ def _post_rifle(username):
     return requests.post(HOST+'/rifle/'+username)
 
 if __name__ == '__main__':
-    _add_user('wbcd', 'wbc')
+    _add_user('wbcd3', 'wbc')
     print _get_rifles('wbc').content
     print _get_rifles('wbcd').content
-    _patch_rifle('wbcd')
+    print _patch_rifle('wbc').content
     _post_rifle('wbcd')

@@ -90,6 +90,19 @@ class User(db.Model):
         db_add_commit(user)
         return True
 
+    @staticmethod
+    def is_super_user(username):
+        user = User.query.filter_by(username=username).first()
+        return user.flag
+
+    @staticmethod
+    def get_all_user_name():
+        result = []
+        users = User.query.all()
+        for user in users:
+            result.append(user.username)
+        return result
+
 
 def db_add_commit(obj):
     db.session.add(obj)
