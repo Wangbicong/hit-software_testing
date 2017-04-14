@@ -10,6 +10,7 @@ class FlaskTestCase(BaseTestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_black_box_2(self):
+
         response = self._patch_rifle(1, 41, 46)
         self.assertEquals(response.status_code, 200)
 

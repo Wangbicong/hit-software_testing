@@ -12,23 +12,24 @@ class BaseTestCase(LiveServerTestCase):
 
     def setUp(self):
         db.create_all()
+        self._add_user('default', 'password')
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
 
-    def _patch_rifle(self, lock=1, stock=1, barrel=1):
-        return requests.patch(self.get_server_url() + '/rifle', json={
+    def _patch_rifle(self, lock=1, stock=1, barrel=1, username='default'):
+        return requests.patch(self.get_server_url() + '/rifle/' + username, json={
             'lock': lock,
             'stock': stock,
             'barrel': barrel
         })
 
-    def _post_rifle(self):
-        return requests.post(self.get_server_url() + '/rifle')
+    def _post_rifle(self, username='default'):
+        return requests.post(self.get_server_url() + '/rifle/' + username)
 
-    def _get_rifles(self):
-        return requests.get(self.get_server_url() + '/rifles')
+    def _get_rifles(self, username='default'):
+        return requests.get(self.get_server_url() + '/rifles/' + username)
 
     def _add_user(self, username, password):
         return requests.post(self.get_server_url() + '/login', json={
